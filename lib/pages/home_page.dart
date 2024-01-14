@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 
@@ -40,11 +40,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: TabBarView(
           children: [
-            // Widgets for the 'Pending' tab
             Center(child: Text('Pending Tasks')),
-            // Widgets for the 'Completed' tab
             Center(child: Text('Completed Tasks')),
-            // Widgets for the 'Overdue' tab
             Center(child: Text('Overdue Tasks')),
           ],
         ),
