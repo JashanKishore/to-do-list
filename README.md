@@ -1,6 +1,6 @@
-# to_do_app
+# To Do List App
 
-A new Flutter project.
+"To-do list mobile app" beginner project for DevProject site. Developed for practice with public access solution.
 
 ## Getting Started
 
