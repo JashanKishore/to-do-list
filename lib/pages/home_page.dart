@@ -14,11 +14,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+
       appBar: AppBar(
         title: Text('TO DO',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
       ),
       elevation: 0,
+      backgroundColor: Colors.black,
+      shadowColor: Colors.white,
+      shape: Border(
+          bottom: BorderSide(color: Colors.white, width: 1.0), // Set the border width
+        ),
       ),
     );
   }
