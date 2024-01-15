@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/util/task.dart';
 import 'package:to_do_app/util/task_list.dart';
-
+import 'package:to_do_app/util/dialog_box.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,12 +46,45 @@ class _HomePageState extends State<HomePage> {
             indicatorColor: Colors.white,
           ),
         ),
-        body: TabBarView(
+         body: TabBarView(
           children: [
-            TaskList(tasks: pendingTasks), // 'Pending' tab
-            TaskList(tasks: completedTasks), // 'Completed' tab
-            TaskList(tasks: overdueTasks), // 'Overdue' tab
+            TaskList(
+              tasks: pendingTasks,
+              onTaskAdded: (newTask) {
+                pendingTasks.add(newTask);
+              },
+            ), // 'Pending' tab
+            TaskList(
+              tasks: completedTasks,
+              onTaskAdded: (newTask) {
+                completedTasks.add(newTask);
+              },
+            ), // 'Completed' tab
+            TaskList(
+              tasks: overdueTasks,
+              onTaskAdded: (newTask) {
+                overdueTasks.add(newTask);
+              },
+            ), // 'Overdue' tab
           ],
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: FloatingActionButton(
+            onPressed: () {
+              // Show a dialog or directly add a task when the button is pressed
+              DialogBox.showAddTaskDialog(context, (newTask) {
+                pendingTasks.add(newTask); // Assuming 'Pending' tab is selected
+              });
+            },
+            child: Icon(
+              Icons.add,
+              size: 30.0,
+              color: Colors.white,
+              ),
+            backgroundColor: Colors.black,
+            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 1.0)),
+          ),
         ),
       ),
     );

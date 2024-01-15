@@ -5,9 +5,10 @@ import 'package:to_do_app/util/todo_tile.dart';
 import 'package:to_do_app/util/task.dart';
 
 class TaskList extends StatefulWidget {
-  final List<Task> tasks;  // Define the named parameter 'tasks'
+  final List<Task> tasks;
+  final void Function(Task) onTaskAdded; // Callback to add a new task
 
-  TaskList({required this.tasks});
+ TaskList({required this.tasks, required this.onTaskAdded});
 
   @override
   _TaskListState createState() => _TaskListState();
