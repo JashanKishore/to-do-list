@@ -51,19 +51,25 @@ class _HomePageState extends State<HomePage> {
             TaskList(
               tasks: pendingTasks,
               onTaskAdded: (newTask) {
-                pendingTasks.add(newTask);
+                setState(() {
+                    pendingTasks.add(newTask);
+                });
               },
             ), // 'Pending' tab
             TaskList(
               tasks: completedTasks,
               onTaskAdded: (newTask) {
-                completedTasks.add(newTask);
+                setState(() {
+                    completedTasks.add(newTask);
+                });
               },
             ), // 'Completed' tab
             TaskList(
               tasks: overdueTasks,
               onTaskAdded: (newTask) {
-                overdueTasks.add(newTask);
+                setState(() {
+                    overdueTasks.add(newTask);
+                });
               },
             ), // 'Overdue' tab
           ],

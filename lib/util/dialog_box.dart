@@ -12,7 +12,10 @@ class DialogBox {
           title: Text('Add New Task'),
           content: TextField(
             controller: textFieldController,
-            decoration: InputDecoration(labelText: 'Task Name'),
+            decoration: InputDecoration(
+              //labelText: 'Task Name',
+              border: OutlineInputBorder(),
+              ),
           ),
           actions: [
             TextButton(
