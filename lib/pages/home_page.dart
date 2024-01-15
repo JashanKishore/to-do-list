@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:to_do_app/util/task.dart';
+import 'package:to_do_app/util/task_list.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,8 +13,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
+    List<Task> pendingTasks = [Task(name: 'test', completed: false)];
+    List<Task> completedTasks = [];
+    List<Task> overdueTasks = [];
+
     return DefaultTabController(
       length: 3, // Number of tabs
       child: Scaffold(
@@ -40,9 +48,9 @@ class _HomePageState extends State<HomePage> {
         ),
         body: TabBarView(
           children: [
-            Center(child: Text('Pending Tasks')),
-            Center(child: Text('Completed Tasks')),
-            Center(child: Text('Overdue Tasks')),
+            TaskList(tasks: pendingTasks), // 'Pending' tab
+            TaskList(tasks: completedTasks), // 'Completed' tab
+            TaskList(tasks: overdueTasks), // 'Overdue' tab
           ],
         ),
       ),
