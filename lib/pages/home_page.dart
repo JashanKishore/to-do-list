@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Task> pendingTasks = [Task(name: 'test', completed: false)];
+    List<Task> pendingTasks = [Task(name: 'Make an app', completed: false), Task(name: 'Bug testing', completed: false) ];
     List<Task> completedTasks = [];
     List<Task> overdueTasks = [];
 
