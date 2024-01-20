@@ -24,20 +24,18 @@ class ToDoTile extends StatelessWidget {
         child: ListTile(
           title: Text(taskName,
           style: TextStyle(
-              //fontSize: 17.0, 
-              //fontWeight: FontWeight.bold,
               color: Colors.white,
               decoration: taskCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-              decorationColor: Colors.white, // Change the line color
-              decorationThickness: 1.0, // Adjust the line thickness
-              decorationStyle: TextDecorationStyle.solid, // Change the line style if needed
+              decorationColor: Colors.white, 
+              decorationThickness: 1.0, 
+              decorationStyle: TextDecorationStyle.solid,
             ),
           ),
           leading: Checkbox(
             value: taskCompleted,
             onChanged: onChanged,
-            activeColor: Colors.black,  // Set the checkbox color when it's active (checked)
-            checkColor: Colors.white,   // Set the check color (tick color)
+            activeColor: Colors.black,
+            checkColor: Colors.white,
           ),
         ),
       ),
