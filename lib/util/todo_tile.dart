@@ -6,11 +6,11 @@ class ToDoTile extends StatelessWidget {
   Function(bool?)? onChanged;
 
   ToDoTile({
-    Key? key,
+    super.key,
     required this.taskName,
     required this.taskCompleted,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
  @override
   Widget build(BuildContext context) {
