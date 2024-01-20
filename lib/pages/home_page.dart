@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:to_do_app/util/task.dart';
-import 'package:to_do_app/util/task_list.dart';
 import 'package:to_do_app/util/dialog_box.dart';
+import 'package:to_do_app/util/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,12 +14,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  List<Task> tasks = [
+    Task(name: 'Task 1'),
+    Task(name: 'Task 2'),
+    Task(name: 'Task 3'),
+    Task(name: 'Task 4'),
+    // Add more tasks as needed
+  ];
+
   @override
   Widget build(BuildContext context) {
-    List<Task> pendingTasks = [Task(name: 'Make an app', completed: false), Task(name: 'Bug testing', completed: false) ];
-    List<Task> completedTasks = [];
-    List<Task> overdueTasks = [];
-
     return DefaultTabController(
       length: 3, // Number of tabs
       child: Scaffold(
@@ -38,8 +42,8 @@ class _HomePageState extends State<HomePage> {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Pending'),
-              Tab(text: 'Completed'),
               Tab(text: 'Overdue'),
+              Tab(text: 'Completed'),
             ],
             labelColor: Colors.white,
             unselectedLabelColor: Colors.grey,
@@ -48,51 +52,44 @@ class _HomePageState extends State<HomePage> {
         ),
          body: TabBarView(
           children: [
-            TaskList(
-              tasks: pendingTasks,
-              onTaskAdded: (newTask) {
-                setState(() {
-                    pendingTasks.add(newTask);
-                });
-              },
-            ), // 'Pending' tab
-            TaskList(
-              tasks: completedTasks,
-              onTaskAdded: (newTask) {
-                setState(() {
-                    completedTasks.add(newTask);
-                });
-              },
-            ), // 'Completed' tab
-            TaskList(
-              tasks: overdueTasks,
-              onTaskAdded: (newTask) {
-                setState(() {
-                    overdueTasks.add(newTask);
-                });
-              },
-            ), // 'Overdue' tab
+            _buildTaskList(tasks.where((task) => !task.isCompleted).toList()),
+            _buildTaskList([]), // You can add logic for 'In Progress' tasks
+            _buildTaskList(tasks.where((task) => task.isCompleted).toList()),
           ],
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: FloatingActionButton(
             onPressed: () {
-              // Show a dialog or directly add a task when the button is pressed
-              DialogBox.showAddTaskDialog(context, (newTask) {
-                pendingTasks.add(newTask); // Assuming 'Pending' tab is selected
-              });
+             
             },
+            backgroundColor: Colors.black,
+            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 1.0)),
             child: Icon(
               Icons.add,
               size: 30.0,
               color: Colors.white,
               ),
-            backgroundColor: Colors.black,
-            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 1.0)),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTaskList(List<Task> tasks) {
+    return ListView.builder(
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        return ToDoTile(
+          taskName: tasks[index].name,
+          taskCompleted: tasks[index].isCompleted,
+          onChanged: (bool? isChecked) {
+            setState(() {
+              tasks[index].isCompleted = isChecked!;
+            });
+          },
+        );
+      },
     );
   }
 }

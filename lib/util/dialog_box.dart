@@ -1,47 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_app/util/task.dart';
 
-class DialogBox {
-  static void showAddTaskDialog(BuildContext context, Function(Task) onTaskAdded) {
-    TextEditingController textFieldController = TextEditingController();
+import 'my_button.dart';
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add New Task'),
-          content: TextField(
-            controller: textFieldController,
-            decoration: InputDecoration(
-              //labelText: 'Task Name',
-              border: OutlineInputBorder(),
+class DialogBox extends StatelessWidget {
+  final dynamic controller;
+  final VoidCallback onSave;
+  final VoidCallback onCancel;
+
+  const DialogBox({
+    super.key,
+    required this.controller,
+    required this.onSave,
+    required this.onCancel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        side: BorderSide(color: Colors.white, width: 1.0),
+      ),
+       contentPadding: const EdgeInsets.all(32.0),
+      content: SizedBox(
+        height: 120,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // get user input
+            TextField(
+              controller: controller,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                //border: OutlineInputBorder(),
+                hintText: "Add a new task here",
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontStyle: FontStyle.normal, 
+                  fontWeight: FontWeight.w400
+                ),
               ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
             ),
-            TextButton(
-              onPressed: () {
-                // Get the task name from the text field
-                String taskName = textFieldController.text;
 
-                // Create a new task
-                Task newTask = Task(name: taskName, completed: false);
+            const SizedBox(height: 16), // Add vertical spacing
 
-                // Call the callback function to handle the addition of the new task
-                onTaskAdded(newTask);
+            // buttons -> save + cancel
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // cancel button
+                MyButton(
+                  text: "Cancel",
+                  onPressed: onCancel,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white, 
+                ),
 
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Add'),
+                const SizedBox(width: 8),
+
+                // save button
+                MyButton(
+                  text: "Save",
+                  onPressed: onSave,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                ),
+              ],
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }
