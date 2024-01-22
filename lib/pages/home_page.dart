@@ -58,20 +58,15 @@ class _HomePageState extends State<HomePage> {
               itemCount: box.values.length,
               itemBuilder: (context, index) {
                 var todo = box.getAt(index);
-                return ListTile(
-                  title: Text(todo!.name),
-                  leading: Checkbox(
-                    value: todo.isCompleted,
-                    onChanged: (val) {
-                      _dbService.toggleCompleted(index, todo);
-                    },
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      _dbService.deleteTask(index);
-                    },
-                  ),
+                return ToDoTile(
+                  taskName: todo!.name,
+                  taskCompleted: todo.isCompleted,
+                  onChanged: (val) {
+                    _dbService.toggleCompleted(index, todo);
+                  },
+                  deleteFunction: (context) {
+                    _dbService.deleteTask(index);
+                  },
                 );
               },
             );
