@@ -18,6 +18,8 @@ class DialogBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.black,
+       surfaceTintColor: Colors.transparent,
+       
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
         side: BorderSide(color: Colors.white, width: 1.0),
@@ -32,18 +34,18 @@ class DialogBox extends StatelessWidget {
             TextField(
               controller: controller,
               style: const TextStyle(color: Colors.white),
+              cursorColor: Colors.white, // Set the cursor color to white
               decoration: const InputDecoration(
                 //border: OutlineInputBorder(),
                 hintText: "Add a new task here",
                 hintStyle: TextStyle(
                   color: Colors.grey,
                   fontStyle: FontStyle.normal, 
-                  fontWeight: FontWeight.w400
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
-
-            const SizedBox(height: 16), // Add vertical spacing
+            const SizedBox(height: 16),
 
             // buttons -> save + cancel
             Row(

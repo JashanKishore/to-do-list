@@ -23,6 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
+      useMaterial3: true,
+      ),
       home: FutureBuilder(
         future: _dbService.getAllTasks(), 
         builder: (context, AsyncSnapshot<List<Task>> snapshot) {

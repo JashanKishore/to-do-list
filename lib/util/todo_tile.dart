@@ -44,6 +44,14 @@ class ToDoTile extends StatelessWidget {
             leading: Checkbox(
               value: taskCompleted,
               onChanged: onChanged,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+                side: BorderSide(
+                  color: taskCompleted ? Colors.black : Colors.white,
+                ),
+              ),
+              checkColor: Colors.white,
+              activeColor: Colors.black,
             ),
           ),
         ),
