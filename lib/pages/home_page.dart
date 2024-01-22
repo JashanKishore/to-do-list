@@ -1,32 +1,34 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:to_do_app/data/database.dart';
+import 'package:to_do_app/util/dialog_box.dart';
+import 'package:to_do_app/util/setupLocator.dart';
 import 'package:to_do_app/util/task.dart';
 import 'package:to_do_app/util/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final List<Task> todos;
+
+  HomePage(this.todos);
+  
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
-  List<Task> tasks = [
-    Task(name: 'Task 1'),
-    Task(name: 'Task 2'),
-    Task(name: 'Task 3'),
-    Task(name: 'Task 4'),
-    // Add more tasks as needed
-  ];
+  final Database _dbService = locator<Database>();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Number of tabs
+      length: 2, 
       child: Scaffold(
         backgroundColor: Colors.black,
+
         appBar: AppBar(
           title: Text(
             'TO DO',
@@ -41,7 +43,6 @@ class _HomePageState extends State<HomePage> {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Pending'),
-              Tab(text: 'Overdue'),
               Tab(text: 'Completed'),
             ],
             labelColor: Colors.white,
@@ -49,18 +50,48 @@ class _HomePageState extends State<HomePage> {
             indicatorColor: Colors.white,
           ),
         ),
-         body: TabBarView(
+        body: TabBarView(
           children: [
-            _buildTaskList(tasks.where((task) => !task.isCompleted).toList()),
-            _buildTaskList([]), // You can add logic for 'In Progress' tasks
-            _buildTaskList(tasks.where((task) => task.isCompleted).toList()),
+            ValueListenableBuilder(
+              valueListenable: Hive.box<Task>('tasks').listenable(),
+              builder: (context, Box<Task> box, _) {
+                var pendingTasks = box.values.where((task) => !task.isCompleted).toList();
+                return _buildTaskList(pendingTasks);
+              },
+            ),
+            ValueListenableBuilder(
+              valueListenable: Hive.box<Task>('tasks').listenable(),
+              builder: (context, Box<Task> box, _) {
+                var completedTasks = box.values.where((task) => task.isCompleted).toList();
+                return _buildTaskList(completedTasks);
+              },
+            ),
           ],
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: FloatingActionButton(
             onPressed: () {
-             
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return DialogBox(
+                    controller: _controller,
+                    onSave: () {
+                      if (_controller.text.isNotEmpty) {
+                          var todo = Task(name: _controller.text, isCompleted: false);
+                          _dbService.addTask(todo);
+                          _controller.clear();
+                          Navigator.pop(context);
+                        }
+                    },
+                    onCancel: () {
+                      _controller.clear();
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              );
             },
             backgroundColor: Colors.black,
             shape: CircleBorder(side: BorderSide(color: Colors.white, width: 1.0)),
@@ -75,20 +106,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildTaskList(List<Task> tasks) {
+    Widget _buildTaskList(List<Task> tasks) {
     return ListView.builder(
       itemCount: tasks.length,
       itemBuilder: (context, index) {
+        var todo = tasks[index];
         return ToDoTile(
-          taskName: tasks[index].name,
-          taskCompleted: tasks[index].isCompleted,
-          onChanged: (bool? isChecked) {
-            setState(() {
-              tasks[index].isCompleted = isChecked!;
-            });
+          taskName: todo.name,
+          taskCompleted: todo.isCompleted,
+          onChanged: (val) {
+            _dbService.toggleCompleted(index, todo);
+          },
+          deleteFunction: (context) {
+            _dbService.deleteTask(index);
           },
         );
       },
     );
   }
+
 }
+
+

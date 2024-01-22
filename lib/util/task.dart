@@ -1,9 +1,22 @@
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
+part 'task.g.dart';
+
+@HiveType(typeId: 1)
 class Task {
-  final String name;        // Name of the task
-  bool isCompleted;           // Completion status of the task
+  var uuid = Uuid();
+  
+  @HiveField(0)
+  String id;                 
+  
+  @HiveField(1)
+  String name;                
+
+  @HiveField(2, defaultValue: false)
+  bool isCompleted;           
 
   Task({
-    required this.name,     // Required parameter for task name
-    this.isCompleted = false,  // Default completion status is false
-  });
+    required this.name,
+    required this.isCompleted,
+  }) : id = Uuid().v1();
 }
