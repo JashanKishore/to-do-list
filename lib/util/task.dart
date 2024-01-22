@@ -4,7 +4,7 @@ part 'task.g.dart';
 
 @HiveType(typeId: 1)
 class Task {
-  var uuid = Uuid();
+  var uuid = const Uuid();
   
   @HiveField(0)
   String id;                 
@@ -18,5 +18,5 @@ class Task {
   Task({
     required this.name,
     required this.isCompleted,
-  }) : id = Uuid().v1();
+  }) : id = const Uuid().v1();
 }

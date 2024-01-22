@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_app/pages/home_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:to_do_app/util/task.dart';
-import 'package:to_do_app/util/setupLocator.dart';
+import 'package:to_do_app/util/setup_locator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:to_do_app/data/database.dart';
 
@@ -18,6 +18,8 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final Database _dbService = locator<Database>();
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
