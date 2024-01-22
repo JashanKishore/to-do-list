@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, 
+      length: 2, 
       child: Scaffold(
         backgroundColor: Colors.black,
 
@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Pending'),
-              Tab(text: 'Overdue'),
               Tab(text: 'Completed'),
             ],
             labelColor: Colors.white,
@@ -51,26 +50,23 @@ class _HomePageState extends State<HomePage> {
             indicatorColor: Colors.white,
           ),
         ),
-        body: ValueListenableBuilder(
-          valueListenable: Hive.box<Task>('tasks').listenable(),
-          builder: (context, Box<Task> box, _) {
-            return ListView.builder(
-              itemCount: box.values.length,
-              itemBuilder: (context, index) {
-                var todo = box.getAt(index);
-                return ToDoTile(
-                  taskName: todo!.name,
-                  taskCompleted: todo.isCompleted,
-                  onChanged: (val) {
-                    _dbService.toggleCompleted(index, todo);
-                  },
-                  deleteFunction: (context) {
-                    _dbService.deleteTask(index);
-                  },
-                );
+        body: TabBarView(
+          children: [
+            ValueListenableBuilder(
+              valueListenable: Hive.box<Task>('tasks').listenable(),
+              builder: (context, Box<Task> box, _) {
+                var pendingTasks = box.values.where((task) => !task.isCompleted).toList();
+                return _buildTaskList(pendingTasks);
               },
-            );
-          },
+            ),
+            ValueListenableBuilder(
+              valueListenable: Hive.box<Task>('tasks').listenable(),
+              builder: (context, Box<Task> box, _) {
+                var completedTasks = box.values.where((task) => task.isCompleted).toList();
+                return _buildTaskList(completedTasks);
+              },
+            ),
+          ],
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(right: 15.0),
@@ -109,4 +105,26 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+    Widget _buildTaskList(List<Task> tasks) {
+    return ListView.builder(
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        var todo = tasks[index];
+        return ToDoTile(
+          taskName: todo.name,
+          taskCompleted: todo.isCompleted,
+          onChanged: (val) {
+            _dbService.toggleCompleted(index, todo);
+          },
+          deleteFunction: (context) {
+            _dbService.deleteTask(index);
+          },
+        );
+      },
+    );
+  }
+
 }
+
+
