@@ -53,19 +53,27 @@ class _DialogBoxState extends State<DialogBox> {
           
           children: [
             // get user input
-            TextField(
-              controller: widget.controller,
-              style: const TextStyle(color: Colors.white),
-              cursorColor: Colors.white, // Set the cursor color to white
-              decoration: const InputDecoration(
-                //border: OutlineInputBorder(),
-                hintText: "Add a new task here",
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontStyle: FontStyle.normal, 
-                  fontWeight: FontWeight.w400,
+            Row(
+              children: [
+                const Icon(Icons.edit, color: Colors.white), // Add an icon at the start of the TextField
+                const SizedBox(width: 14),
+                Expanded(
+                  child: TextField(
+                    controller: widget.controller,
+                    style: const TextStyle(color: Colors.white),
+                    cursorColor: Colors.white, // Set the cursor color to white
+                    decoration: const InputDecoration(
+                      hintText: "Name your task",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontStyle: FontStyle.normal, 
+                        fontWeight: FontWeight.w400,
+                      ),
+                      border: InputBorder.none, // Remove the border to make it look like the DatePicker
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 16),
 
@@ -75,7 +83,7 @@ class _DialogBoxState extends State<DialogBox> {
               child: Row(
                 children: [
                   const Icon(Icons.calendar_today, color: Colors.white),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 14),
                   Text(
                     selectedDate == DateTime.now() ? 'Select a date' : DateFormat('dd - MM - yyyy').format(selectedDate),
                     style: const TextStyle(color: Colors.white),
