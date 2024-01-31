@@ -16,7 +16,7 @@ class Task {
   bool isCompleted;       
 
 @HiveField(3)
-  DateTime? dueDate = DateTime.now();
+  DateTime? dueDate;
 
   Task({
     required this.name,

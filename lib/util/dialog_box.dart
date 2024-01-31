@@ -1,18 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'my_button.dart';
 
-class DialogBox extends StatelessWidget {
+class DialogBox extends StatefulWidget {
   final dynamic controller;
   final VoidCallback onSave;
   final VoidCallback onCancel;
 
-  const DialogBox({
+  DialogBox({
     super.key,
     required this.controller,
     required this.onSave,
     required this.onCancel,
   });
+
+  @override
+  State<DialogBox> createState() => _DialogBoxState();
+}
+
+class _DialogBoxState extends State<DialogBox> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +47,14 @@ class DialogBox extends StatelessWidget {
       ),
        contentPadding: const EdgeInsets.all(32.0),
 
-      content: SizedBox(
-        height: 120,
-        
+       content: SingleChildScrollView( // Wrap your Column in a SingleChildScrollView
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           
           children: [
             // get user input
             TextField(
-              controller: controller,
+              controller: widget.controller,
               style: const TextStyle(color: Colors.white),
               cursorColor: Colors.white, // Set the cursor color to white
               decoration: const InputDecoration(
@@ -49,6 +69,21 @@ class DialogBox extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
+            // date picker
+            TextButton(
+              onPressed: () => _selectDate(context),
+              child: Row(
+                children: [
+                  const Icon(Icons.calendar_today, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Text(
+                    selectedDate == DateTime.now() ? 'Select a date' : DateFormat('dd - MM - yyyy').format(selectedDate),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+
             // buttons -> save + cancel
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -56,7 +91,7 @@ class DialogBox extends StatelessWidget {
                 // cancel button
                 MyButton(
                   text: "Cancel",
-                  onPressed: onCancel,
+                  onPressed: widget.onCancel,
                   backgroundColor: Colors.black,
                   textColor: Colors.white, 
                 ),
@@ -66,7 +101,7 @@ class DialogBox extends StatelessWidget {
                 // save button
                 MyButton(
                   text: "Save",
-                  onPressed: onSave,
+                  onPressed: widget.onSave,
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),
