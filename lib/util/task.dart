@@ -13,7 +13,10 @@ class Task {
   String name;                
 
   @HiveField(2, defaultValue: false)
-  bool isCompleted;           
+  bool isCompleted;       
+
+@HiveField(3, defaultValue: DateTime.now())
+  DateTime? dueDate;
 
   Task({
     required this.name,
