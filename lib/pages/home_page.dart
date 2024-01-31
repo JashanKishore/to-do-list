@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
           },
           deleteFunction: (context) {
             _dbService.deleteTask(index);
-          },
+          }, dueDate: DateTime.now(),
         );
       },
     );

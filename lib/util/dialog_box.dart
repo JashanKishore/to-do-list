@@ -18,17 +18,19 @@ class DialogBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.black,
-       surfaceTintColor: Colors.transparent,
-       
+      surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
         side: BorderSide(color: Colors.white, width: 1.0),
       ),
        contentPadding: const EdgeInsets.all(32.0),
+
       content: SizedBox(
         height: 120,
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          
           children: [
             // get user input
             TextField(
