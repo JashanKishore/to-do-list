@@ -8,7 +8,7 @@ class DialogBox extends StatefulWidget {
   final VoidCallback onSave;
   final VoidCallback onCancel;
 
-  DialogBox({
+  const DialogBox({
     super.key,
     required this.controller,
     required this.onSave,
