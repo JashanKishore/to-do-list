@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,10 +25,10 @@ class _DialogBoxState extends State<DialogBox> {
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+     DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime.now(),
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2021),
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != selectedDate) {
@@ -40,6 +42,15 @@ class _DialogBoxState extends State<DialogBox> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.black,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child: Text(
+          "Create new task",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -47,50 +58,56 @@ class _DialogBoxState extends State<DialogBox> {
       ),
        contentPadding: const EdgeInsets.all(32.0),
 
-       content: SingleChildScrollView( // Wrap your Column in a SingleChildScrollView
+       content: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           
           children: [
-            // get user input
             Row(
               children: [
-                const Icon(Icons.edit, color: Colors.white), // Add an icon at the start of the TextField
-                const SizedBox(width: 14),
                 Expanded(
                   child: TextField(
                     controller: widget.controller,
                     style: const TextStyle(color: Colors.white),
                     cursorColor: Colors.white, // Set the cursor color to white
-                    decoration: const InputDecoration(
-                      hintText: "Name your task",
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.edit, color: Colors.white),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      hintText: "Task name",
                       hintStyle: TextStyle(
                         color: Colors.grey,
                         fontStyle: FontStyle.normal, 
                         fontWeight: FontWeight.w400,
                       ),
-                      border: InputBorder.none, // Remove the border to make it look like the DatePicker
+                      //border: InputBorder.none, // Remove the border to make it look like the DatePicker
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
 
             // date picker
-            TextButton(
-              onPressed: () => _selectDate(context),
-              child: Row(
-                children: [
-                  const Icon(Icons.calendar_today, color: Colors.white),
-                  const SizedBox(width: 14),
-                  Text(
-                    selectedDate == DateTime.now() ? 'Select a date' : DateFormat('dd - MM - yyyy').format(selectedDate),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
+            TextField(
+              readOnly: true,
+              onTap: () => _selectDate(context),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.calendar_today, color: Colors.white),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                hintText: 'Due date',
+                hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontStyle: FontStyle.normal, 
+                        fontWeight: FontWeight.w400,
+                      ),    
               ),
             ),
+
+            const SizedBox(height: 32),
 
             // buttons -> save + cancel
             Row(
