@@ -2,38 +2,39 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'my_button.dart';
 
+typedef SaveCallback = void Function(String taskName, DateTime dueDate);
 class DialogBox extends StatefulWidget {
-  final dynamic controller;
-  final VoidCallback onSave;
+  final TextEditingController taskController;
+  final TextEditingController dateController;
+  final SaveCallback onSave;
   final VoidCallback onCancel;
 
   const DialogBox({
-    super.key,
-    required this.controller,
+    Key? key,
+    required this.taskController,
+    required this.dateController,
     required this.onSave,
     required this.onCancel,
-  });
+  }) : super(key: key);
 
   @override
   State<DialogBox> createState() => _DialogBoxState();
 }
 
 class _DialogBoxState extends State<DialogBox> {
-  DateTime selectedDate = DateTime.now();
 
-  Future<void> _selectDate(BuildContext context) async {
-     DateTime? picked = await showDatePicker(
+  Future<void> _selectDate() async {
+    DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2021),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != selectedDate) {
+    if (picked != null) {
       setState(() {
-        selectedDate = picked;
+        widget.dateController.text = DateFormat('dd-MM-yyyy').format(picked);
       });
     }
   }
@@ -67,7 +68,7 @@ class _DialogBoxState extends State<DialogBox> {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: widget.controller,
+                    controller: widget.taskController,
                     style: const TextStyle(color: Colors.white),
                     cursorColor: Colors.white, // Set the cursor color to white
                     decoration: InputDecoration(
@@ -91,8 +92,10 @@ class _DialogBoxState extends State<DialogBox> {
 
             // date picker
             TextField(
+              controller: widget.dateController,
               readOnly: true,
-              onTap: () => _selectDate(context),
+              onTap: () => _selectDate(),
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.calendar_today, color: Colors.white),
                 focusedBorder: UnderlineInputBorder(
@@ -126,7 +129,12 @@ class _DialogBoxState extends State<DialogBox> {
                 // save button
                 MyButton(
                   text: "Save",
-                  onPressed: widget.onSave,
+                  onPressed: () {
+                    if (widget.taskController.text.isNotEmpty && widget.dateController.text.isNotEmpty) {
+                      var dueDate = DateFormat('dd-MM-yyyy HH:mm').parse(widget.dateController.text);
+                      widget.onSave(widget.taskController.text, dueDate);
+                    }
+                  },
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
                 ),

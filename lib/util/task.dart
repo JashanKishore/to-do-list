@@ -16,11 +16,11 @@ class Task {
   bool isCompleted;       
 
 @HiveField(3)
-  DateTime? dueDate;
+  DateTime dueDate;
 
   Task({
     required this.name,
     required this.isCompleted,
-    this.dueDate,
+    required this.dueDate,
   }) : id = const Uuid().v1();
 }

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class ToDoTile extends StatelessWidget {
   final String taskName;
   final bool taskCompleted;
-  final DateTime dueDate; // Added dueDate property
+  final DateTime dueDate;
   final Function(bool?)? onChanged;
   final Function(BuildContext)? deleteFunction;
 
@@ -13,7 +13,7 @@ class ToDoTile extends StatelessWidget {
     super.key,
     required this.taskName,
     required this.taskCompleted,
-    required this.dueDate, // Updated constructor
+    required this.dueDate,
     required this.onChanged,
     this.deleteFunction,
   });
@@ -54,7 +54,7 @@ class ToDoTile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat('dd-MM HH:mm').format(dueDate), // Display dueDate
+                  DateFormat('dd-MM-yyy HH:mm').format(dueDate), // Display dueDate
                   style: const TextStyle(
                     color: Color.fromARGB(255, 131, 131, 131),
                     fontSize: 14,
