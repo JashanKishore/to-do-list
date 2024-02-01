@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                   dateController: _dateController,
                   timeController: _timeController,
                   onSave: (taskName, dueDate, dueTime) {
-                    if (taskName.isNotEmpty && dueDate != null && dueTime != null) {
+                    if (taskName.isNotEmpty) {
                       var task = Task(name: taskName, dueDate: dueDate, isCompleted: false, dueTime: dueTime);
                       _dbService.addTask(task);
                       _taskController.clear();

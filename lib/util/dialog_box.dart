@@ -168,7 +168,7 @@ class _DialogBoxState extends State<DialogBox> {
                   onPressed: () {
                     if (widget.taskController.text.isNotEmpty && widget.dateController.text.isNotEmpty) {
                       var dueDate = DateFormat('dd-MM-yyy').parse(widget.dateController.text);
-                      var dueTime = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(widget.timeController.text));
+                      var dueTime = TimeOfDay.fromDateTime(DateFormat('HH:mm a').parse(widget.timeController.text));
                       widget.onSave(widget.taskController.text, dueDate, dueTime);
                     }
                   },
