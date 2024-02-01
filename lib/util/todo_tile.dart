@@ -43,12 +43,13 @@ class ToDoTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(8)),
           child: ListTile(
             title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   taskName,
                   style: TextStyle(
                     color: Colors.white,
+                    fontSize: 18,
                     decoration: taskCompleted
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
@@ -57,19 +58,24 @@ class ToDoTile extends StatelessWidget {
                     decorationStyle: TextDecorationStyle.solid,
                   ),
                 ),
-                Text(
-                  DateFormat('dd-MM-yyyy').format(dueDate), // Display dueDate
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 131, 131, 131),
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  dueTime.format(context), // Display dueTime
-                  style: const TextStyle(
-                    color: Color.fromARGB(255, 131, 131, 131),
-                    fontSize: 14,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      DateFormat('dd-MM-yyyy').format(dueDate), // Display dueDate
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 131, 131, 131),
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      dueTime.format(context), // Display dueTime
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 131, 131, 131),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
