@@ -5,12 +5,14 @@ import 'package:to_do_app/util/task.dart';
 import 'package:to_do_app/util/setup_locator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:to_do_app/data/database.dart';
+import 'package:to_do_app/util/time_of_day_adapter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter((await getApplicationDocumentsDirectory()).path);
   Hive.registerAdapter(TaskAdapter());
+  Hive.registerAdapter(TimeOfDayAdapter());
 
   setupLocator();
   runApp(MyApp());

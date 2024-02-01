@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'my_button.dart';
 
-typedef SaveCallback = void Function(String taskName, DateTime dueDate);
+typedef SaveCallback = void Function(String taskName, DateTime dueDate, TimeOfDay dueTime);
 class DialogBox extends StatefulWidget {
   final TextEditingController taskController;
   final TextEditingController dateController;
+  final TextEditingController timeController;
   final SaveCallback onSave;
   final VoidCallback onCancel;
 
@@ -15,6 +16,7 @@ class DialogBox extends StatefulWidget {
     super.key,
     required this.taskController,
     required this.dateController,
+    required this.timeController,
     required this.onSave,
     required this.onCancel,
   });
@@ -35,6 +37,18 @@ class _DialogBoxState extends State<DialogBox> {
     if (picked != null) {
       setState(() {
         widget.dateController.text = DateFormat('dd-MM-yyy').format(picked);
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        widget.timeController.text = picked.format(context);
       });
     }
   }
@@ -88,7 +102,7 @@ class _DialogBoxState extends State<DialogBox> {
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
             // date picker
             TextField(
@@ -107,6 +121,28 @@ class _DialogBoxState extends State<DialogBox> {
                         fontStyle: FontStyle.normal, 
                         fontWeight: FontWeight.w400,
                       ),    
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // time picker
+            TextField(
+              controller: widget.timeController,
+              readOnly: true,
+              onTap: _selectTime,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.access_time, color: Colors.white),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                hintText: 'Due time',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
 
@@ -132,7 +168,8 @@ class _DialogBoxState extends State<DialogBox> {
                   onPressed: () {
                     if (widget.taskController.text.isNotEmpty && widget.dateController.text.isNotEmpty) {
                       var dueDate = DateFormat('dd-MM-yyy').parse(widget.dateController.text);
-                      widget.onSave(widget.taskController.text, dueDate);
+                      var dueTime = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(widget.timeController.text));
+                      widget.onSave(widget.taskController.text, dueDate, dueTime);
                     }
                   },
                   backgroundColor: Colors.white,

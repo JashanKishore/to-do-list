@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
   final List<Task> todos;
 
   const HomePage(this.todos, {super.key});
-  
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   final Database _dbService = locator<Database>();
   final _taskController = TextEditingController();
   final _dateController = TextEditingController();
+  final _timeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +79,10 @@ class _HomePageState extends State<HomePage> {
                 return DialogBox(
                   taskController: _taskController,
                   dateController: _dateController,
-                  onSave: (taskName, dueDate) {
-                    if (taskName.isNotEmpty && dueDate != null) {
-                      var task = Task(name: taskName, dueDate: dueDate, isCompleted: false);
+                  timeController: _timeController,
+                  onSave: (taskName, dueDate, dueTime) {
+                    if (taskName.isNotEmpty && dueDate != null && dueTime != null) {
+                      var task = Task(name: taskName, dueDate: dueDate, isCompleted: false, dueTime: dueTime);
                       _dbService.addTask(task);
                       _taskController.clear();
                       _dateController.clear();
@@ -124,6 +125,7 @@ class _HomePageState extends State<HomePage> {
           deleteFunction: (context) {
             _dbService.deleteTask(index);
           }, dueDate: todo.dueDate,
+          dueTime: todo.dueTime,
         );
       },
     );

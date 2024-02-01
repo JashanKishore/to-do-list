@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 part 'task.g.dart';
@@ -18,9 +19,13 @@ class Task {
 @HiveField(3)
   DateTime dueDate;
 
+@HiveField(4)
+  TimeOfDay dueTime;
+
   Task({
     required this.name,
     required this.isCompleted,
     required this.dueDate,
+    required this.dueTime,
   }) : id = const Uuid().v1();
 }

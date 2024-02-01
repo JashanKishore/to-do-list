@@ -7,6 +7,7 @@ class ToDoTile extends StatelessWidget {
   final bool taskCompleted;
   final DateTime dueDate;
   final Function(bool?)? onChanged;
+  final TimeOfDay dueTime;
   final Function(BuildContext)? deleteFunction;
 
   const ToDoTile({
@@ -15,6 +16,7 @@ class ToDoTile extends StatelessWidget {
     required this.taskCompleted,
     required this.dueDate,
     required this.onChanged,
+    required this.dueTime,
     this.deleteFunction,
   });
 
@@ -27,18 +29,18 @@ class ToDoTile extends StatelessWidget {
           extentRatio: 0.3,
           motion: const StretchMotion(),
           children: [
-            SlidableAction(onPressed: deleteFunction, 
-            backgroundColor: Colors.red, 
-            icon: Icons.delete, 
-            borderRadius: BorderRadius.circular(8),
+            SlidableAction(
+              onPressed: deleteFunction,
+              backgroundColor: Colors.red,
+              icon: Icons.delete,
+              borderRadius: BorderRadius.circular(8),
             )
           ],
         ),
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 1.0),
-            borderRadius: BorderRadius.circular(8)
-          ),
+              border: Border.all(color: Colors.white, width: 1.0),
+              borderRadius: BorderRadius.circular(8)),
           child: ListTile(
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,14 +49,23 @@ class ToDoTile extends StatelessWidget {
                   taskName,
                   style: TextStyle(
                     color: Colors.white,
-                    decoration: taskCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-                    decorationColor: Colors.white, 
-                    decorationThickness: 1.0, 
+                    decoration: taskCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    decorationColor: Colors.white,
+                    decorationThickness: 1.0,
                     decorationStyle: TextDecorationStyle.solid,
                   ),
                 ),
                 Text(
-                  DateFormat('dd-MM-yyy').format(dueDate), // Display dueDate
+                  DateFormat('dd-MM-yyyy').format(dueDate), // Display dueDate
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 131, 131, 131),
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  dueTime.format(context), // Display dueTime
                   style: const TextStyle(
                     color: Color.fromARGB(255, 131, 131, 131),
                     fontSize: 14,
