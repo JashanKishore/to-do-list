@@ -54,7 +54,7 @@ class ToDoTile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat('dd-MM-yyyy \'at\' HH').format(dueDate), // Display dueDate
+                  DateFormat('dd-MM-yyy').format(dueDate), // Display dueDate
                   style: const TextStyle(
                     color: Color.fromARGB(255, 131, 131, 131),
                     fontSize: 14,
