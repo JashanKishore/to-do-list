@@ -12,12 +12,12 @@ class DialogBox extends StatefulWidget {
   final VoidCallback onCancel;
 
   const DialogBox({
-    Key? key,
+    super.key,
     required this.taskController,
     required this.dateController,
     required this.onSave,
     required this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   State<DialogBox> createState() => _DialogBoxState();
@@ -34,7 +34,7 @@ class _DialogBoxState extends State<DialogBox> {
     );
     if (picked != null) {
       setState(() {
-        widget.dateController.text = DateFormat('dd-MM-yyyy').format(picked);
+        widget.dateController.text = DateFormat('dd-MM-yyyy \'at\' HH').format(picked);
       });
     }
   }
@@ -131,7 +131,7 @@ class _DialogBoxState extends State<DialogBox> {
                   text: "Save",
                   onPressed: () {
                     if (widget.taskController.text.isNotEmpty && widget.dateController.text.isNotEmpty) {
-                      var dueDate = DateFormat('dd-MM-yyyy HH:mm').parse(widget.dateController.text);
+                      var dueDate = DateFormat('dd-MM-yyyy \'at\' HH').parse(widget.dateController.text);
                       widget.onSave(widget.taskController.text, dueDate);
                     }
                   },
