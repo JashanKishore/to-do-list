@@ -20,7 +20,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Database _dbService = locator<Database>();
-  final TextEditingController _controller = TextEditingController();
+  final _taskController = TextEditingController();
+  final _dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,25 +74,28 @@ class _HomePageState extends State<HomePage> {
           child: FloatingActionButton(
             onPressed: () {
               showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return DialogBox(
-                    controller: _controller,
-                    onSave: () {
-                      if (_controller.text.isNotEmpty) {
-                          var todo = Task(name: _controller.text, isCompleted: false);
-                          _dbService.addTask(todo);
-                          _controller.clear();
-                          Navigator.pop(context);
-                        }
-                    },
-                    onCancel: () {
-                      _controller.clear();
+              context: context,
+              builder: (BuildContext context) {
+                return DialogBox(
+                  taskController: _taskController,
+                  dateController: _dateController,
+                  onSave: (taskName, dueDate) {
+                    if (taskName.isNotEmpty && dueDate != null) {
+                      var task = Task(name: taskName, dueDate: dueDate, isCompleted: false);
+                      _dbService.addTask(task);
+                      _taskController.clear();
+                      _dateController.clear();
                       Navigator.pop(context);
-                    },
-                  );
-                },
-              );
+                    }
+                  },
+                  onCancel: () {
+                    _taskController.clear();
+                    _dateController.clear();
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            );
             },
             backgroundColor: Colors.black,
             shape: CircleBorder(side: BorderSide(color: Colors.white, width: 1.0)),
@@ -119,7 +123,7 @@ class _HomePageState extends State<HomePage> {
           },
           deleteFunction: (context) {
             _dbService.deleteTask(index);
-          },
+          }, dueDate: todo.dueDate,
         );
       },
     );

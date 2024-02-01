@@ -13,10 +13,14 @@ class Task {
   String name;                
 
   @HiveField(2, defaultValue: false)
-  bool isCompleted;           
+  bool isCompleted;       
+
+@HiveField(3)
+  DateTime dueDate;
 
   Task({
     required this.name,
     required this.isCompleted,
+    required this.dueDate,
   }) : id = const Uuid().v1();
 }

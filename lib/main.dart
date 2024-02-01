@@ -30,6 +30,9 @@ class MyApp extends StatelessWidget {
       highlightColor: Colors.transparent,
       splashFactory: NoSplash.splashFactory,
       useMaterial3: true,
+      iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       home: FutureBuilder(
         future: _dbService.getAllTasks(), 
