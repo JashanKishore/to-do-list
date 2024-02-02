@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             ValueListenableBuilder(
               valueListenable: Hive.box<Task>('tasks').listenable(),
               builder: (context, Box<Task> box, _) {
-                var pendingTasks = box.values.where((task) => !task.isCompleted).toList();
+                var pendingTasks = box.values.where((task) => !task.isCompleted && task.dueDate.isAfter(DateTime.now())).toList();
                 return _buildTaskList(pendingTasks);
               },
             ),
