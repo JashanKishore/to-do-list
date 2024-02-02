@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 245.0), // adjust the value as needed
                       child: Text(
-                        'No items to display \n Press “+” to add new items',
+                        'No tasks to display \n\n Press “+” to add new items',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color.fromARGB(255, 174, 174, 174),
