@@ -35,6 +35,10 @@ class MyApp extends StatelessWidget {
       iconTheme: const IconThemeData(
           color: Colors.white,
         ),
+        textTheme: ThemeData.light().textTheme.apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.white,
+        ),
       ),
       home: FutureBuilder(
         future: _dbService.getAllTasks(), 

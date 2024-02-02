@@ -58,6 +58,22 @@ class _HomePageState extends State<HomePage> {
               valueListenable: Hive.box<Task>('tasks').listenable(),
               builder: (context, Box<Task> box, _) {
                 var pendingTasks = box.values.where((task) => !task.isCompleted && task.dueDate.isAfter(DateTime.now())).toList();
+                if (pendingTasks.isEmpty) {
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 245.0), // adjust the value as needed
+                      child: Text(
+                        'No items to display \n Press “+” to add new items',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 174, 174, 174),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 return _buildTaskList(pendingTasks);
               },
             ),
@@ -65,6 +81,22 @@ class _HomePageState extends State<HomePage> {
               valueListenable: Hive.box<Task>('tasks').listenable(),
               builder: (context, Box<Task> box, _) {
                 var overdueTasks = box.values.where((task) => !task.isCompleted && task.dueDate.isBefore(DateTime.now())).toList();
+                if (overdueTasks.isEmpty) {
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 245.0), // adjust the value as needed
+                      child: Text(
+                        'No overdue tasks',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 174, 174, 174),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 return _buildTaskList(overdueTasks);
               },
             ),
@@ -72,6 +104,22 @@ class _HomePageState extends State<HomePage> {
               valueListenable: Hive.box<Task>('tasks').listenable(),
               builder: (context, Box<Task> box, _) {
                 var completedTasks = box.values.where((task) => task.isCompleted).toList();
+                if (completedTasks.isEmpty) {
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 245.0), // adjust the value as needed
+                      child: Text(
+                        'No tasks completed yet',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 174, 174, 174),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 return _buildTaskList(completedTasks);
               },
             ),
