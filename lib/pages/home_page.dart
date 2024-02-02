@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2, 
+      length: 3, 
       child: Scaffold(
         backgroundColor: Colors.black,
 
@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Pending'),
+              Tab(text: 'Overdue'),
               Tab(text: 'Completed'),
             ],
             labelColor: Colors.white,
@@ -58,6 +59,13 @@ class _HomePageState extends State<HomePage> {
               builder: (context, Box<Task> box, _) {
                 var pendingTasks = box.values.where((task) => !task.isCompleted).toList();
                 return _buildTaskList(pendingTasks);
+              },
+            ),
+            ValueListenableBuilder(
+              valueListenable: Hive.box<Task>('tasks').listenable(),
+              builder: (context, Box<Task> box, _) {
+                var overdueTasks = box.values.where((task) => !task.isCompleted && task.dueDate.isBefore(DateTime.now())).toList();
+                return _buildTaskList(overdueTasks);
               },
             ),
             ValueListenableBuilder(
@@ -116,14 +124,22 @@ class _HomePageState extends State<HomePage> {
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         var todo = tasks[index];
+        var isOverdue = !todo.isCompleted && todo.dueDate.isBefore(DateTime.now());
+        if (isOverdue) {
+          // This task is overdue
+        } else if (todo.isCompleted) {
+          // This task is completed
+        } else {
+          // This task is not completed and not overdue
+        }
         return ToDoTile(
           taskName: todo.name,
           taskCompleted: todo.isCompleted,
           onChanged: (val) {
-            _dbService.toggleCompleted(index, todo);
+            _dbService.toggleCompleted(todo.id, todo);
           },
-          deleteFunction: (context) {
-            _dbService.deleteTask(index);
+          deleteFunction: () {
+            _dbService.deleteTask(todo.id);
           }, dueDate: todo.dueDate,
           dueTime: todo.dueTime,
         );

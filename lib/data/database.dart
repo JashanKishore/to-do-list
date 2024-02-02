@@ -8,28 +8,28 @@ class Database {
 
   Future<void> addTask(Task task) async {
     var box = await _box;
-    await box.add(task);
-  }
+    await box.put(task.id, task);
+}
 
   Future<List<Task>> getAllTasks() async {
     var box = await _box;
     return box.values.toList();
   }
 
-  Future<void> deleteTask(int index) async {
+  Future<void> deleteTask(dynamic key) async {
     var box = await _box;
-    await box.deleteAt(index);
+    await box.delete(key);
   }
 
-  Future<void> updateIsComplete(int index, Task task) async {
+  Future<void> updateIsComplete(dynamic key, Task task) async {
     var box = await _box;
     task.isCompleted = !task.isCompleted;
-    await box.put(index, task);
+    await box.put(key, task);
   }
 
-  Future<void> toggleCompleted(int index, Task item) async {
+  Future<void> toggleCompleted(dynamic key, Task item) async {
     var box = await _box;
     item.isCompleted = !item.isCompleted;
-    await box.putAt(index, item);
+    await box.put(key, item);
   }
 }
