@@ -8,7 +8,7 @@ class ToDoTile extends StatelessWidget {
   final DateTime dueDate;
   final Function(bool?)? onChanged;
   final TimeOfDay dueTime;
-  final Function(BuildContext)? deleteFunction;
+  final VoidCallback? deleteFunction;
 
   const ToDoTile({
     super.key,
@@ -30,7 +30,7 @@ class ToDoTile extends StatelessWidget {
           motion: const StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: deleteFunction,
+              onPressed: (context) => deleteFunction?.call(),
               backgroundColor: Colors.red,
               icon: Icons.delete,
               borderRadius: BorderRadius.circular(8),
