@@ -6,19 +6,25 @@ import 'my_button.dart';
 
 typedef SaveCallback = void Function(String taskName, DateTime dueDate, TimeOfDay dueTime);
 class DialogBox extends StatefulWidget {
+  final String title;
   final TextEditingController taskController;
   final TextEditingController dateController;
   final TextEditingController timeController;
   final SaveCallback onSave;
   final VoidCallback onCancel;
+  final Function()? onDateTap;
+  final Function()? onTimeTap;
 
   const DialogBox({
     super.key,
+    required this.title,
     required this.taskController,
     required this.dateController,
     required this.timeController,
     required this.onSave,
     required this.onCancel,
+    required this.onDateTap,
+    required this.onTimeTap,
   });
 
   @override
@@ -60,7 +66,7 @@ class _DialogBoxState extends State<DialogBox> {
       title: Padding(
         padding: const EdgeInsets.only(left: 5.0),
         child: Text(
-          "Create new task",
+          widget.title,
           style: TextStyle(
             color: Colors.white,
           ),
@@ -108,7 +114,12 @@ class _DialogBoxState extends State<DialogBox> {
             TextField(
               controller: widget.dateController,
               readOnly: true,
-              onTap: () => _selectDate(),
+              onTap: () {
+                _selectDate();
+                if (widget.onDateTap != null) {
+                  widget.onDateTap?.call();
+                }
+              },
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.calendar_today, color: Colors.white),
@@ -130,7 +141,12 @@ class _DialogBoxState extends State<DialogBox> {
             TextField(
               controller: widget.timeController,
               readOnly: true,
-              onTap: _selectTime,
+              onTap: () {
+                _selectTime();
+                if (widget.onTimeTap != null) {
+                  widget.onTimeTap?.call();
+                }
+              },
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.access_time, color: Colors.white),

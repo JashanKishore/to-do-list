@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:to_do_app/data/database.dart';
 import 'package:to_do_app/util/dialog_box.dart';
+import 'package:to_do_app/util/edit_task_dialog_box.dart';
 import 'package:to_do_app/util/setup_locator.dart';
 import 'package:to_do_app/util/task.dart';
 import 'package:to_do_app/util/todo_tile.dart';
@@ -133,6 +135,7 @@ class _HomePageState extends State<HomePage> {
               context: context,
               builder: (BuildContext context) {
                 return DialogBox(
+                  title: 'Add Task',
                   taskController: _taskController,
                   dateController: _dateController,
                   timeController: _timeController,
@@ -149,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                     _taskController.clear();
                     _dateController.clear();
                     Navigator.pop(context);
-                  },
+                  }, onDateTap: () {}, onTimeTap: () {},
                 );
               },
             );
@@ -191,28 +194,33 @@ class _HomePageState extends State<HomePage> {
           }, dueDate: todo.dueDate,
           dueTime: todo.dueTime,
           onTap: () {
+            final TextEditingController taskController = TextEditingController(text: todo.name);
+            final TextEditingController dateController = TextEditingController(text: DateFormat('dd-MM-yyy').format(todo.dueDate));
+            final TextEditingController timeController = TextEditingController(text: todo.dueTime.format(context));
+
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                final TextEditingController controller = TextEditingController(text: todo.name);
-                return DialogBox(
-                  taskController: controller,
-                  dateController: _dateController,
-                  timeController: _timeController,
+                return EditTaskDialogBox(
+                  taskController: taskController,
+                  dateController: dateController,
+                  timeController: timeController,
                   onSave: (taskName, dueDate, dueTime) {
                     if (taskName.isNotEmpty) {
                       var task = Task(name: taskName, dueDate: dueDate, isCompleted: false, dueTime: dueTime);
                       _dbService.updateTask(todo.id, task);
-                      _taskController.clear();
-                      _dateController.clear();
+                      taskController.clear();
+                      dateController.clear();
+                      timeController.clear();
                       Navigator.pop(context);
                     }
                   },
                   onCancel: () {
-                    _taskController.clear();
-                    _dateController.clear();
+                    taskController.clear();
+                    dateController.clear();
+                    timeController.clear();
                     Navigator.pop(context);
-                  },
+                  }
                 );
               },
             ).then((_) => setState(() {}));
