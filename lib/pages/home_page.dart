@@ -190,11 +190,37 @@ class _HomePageState extends State<HomePage> {
             _dbService.deleteTask(todo.id);
           }, dueDate: todo.dueDate,
           dueTime: todo.dueTime,
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                final TextEditingController controller = TextEditingController(text: todo.name);
+                return DialogBox(
+                  taskController: controller,
+                  dateController: _dateController,
+                  timeController: _timeController,
+                  onSave: (taskName, dueDate, dueTime) {
+                    if (taskName.isNotEmpty) {
+                      var task = Task(name: taskName, dueDate: dueDate, isCompleted: false, dueTime: dueTime);
+                      _dbService.updateTask(todo.id, task);
+                      _taskController.clear();
+                      _dateController.clear();
+                      Navigator.pop(context);
+                    }
+                  },
+                  onCancel: () {
+                    _taskController.clear();
+                    _dateController.clear();
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            ).then((_) => setState(() {}));
+          },
         );
       },
     );
   }
-
 }
 
 

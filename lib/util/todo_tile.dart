@@ -9,6 +9,7 @@ class ToDoTile extends StatelessWidget {
   final Function(bool?)? onChanged;
   final TimeOfDay dueTime;
   final VoidCallback? deleteFunction;
+  final Function onTap;
 
   const ToDoTile({
     super.key,
@@ -18,78 +19,82 @@ class ToDoTile extends StatelessWidget {
     required this.onChanged,
     required this.dueTime,
     this.deleteFunction,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
-      child: Slidable(
-        endActionPane: ActionPane(
-          extentRatio: 0.3,
-          motion: const StretchMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) => deleteFunction?.call(),
-              backgroundColor: Colors.red,
-              icon: Icons.delete,
-              borderRadius: BorderRadius.circular(8),
-            )
-          ],
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.white, width: 1.0),
-              borderRadius: BorderRadius.circular(8)),
-          child: ListTile(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  taskName,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    decoration: taskCompleted
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    decorationColor: Colors.white,
-                    decorationThickness: 1.0,
-                    decorationStyle: TextDecorationStyle.solid,
+      child: InkWell(
+        onLongPress: () => onTap(),
+        child: Slidable(
+          endActionPane: ActionPane(
+            extentRatio: 0.3,
+            motion: const StretchMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context) => deleteFunction?.call(),
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
+                borderRadius: BorderRadius.circular(8),
+              )
+            ],
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.white, width: 1.0),
+                borderRadius: BorderRadius.circular(8)),
+            child: ListTile(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    taskName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      decoration: taskCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                      decorationColor: Colors.white,
+                      decorationThickness: 1.0,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        DateFormat('dd-MM-yyyy').format(dueDate), // Display dueDate
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 131, 131, 131),
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      Text(
+                        dueTime.format(context), // Display dueTime
+                        style: const TextStyle(
+                          color: Color.fromARGB(255, 131, 131, 131),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              leading: Checkbox(
+                value: taskCompleted,
+                onChanged: onChanged,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  side: BorderSide(
+                    color: taskCompleted ? Colors.black : Colors.white,
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      DateFormat('dd-MM-yyyy').format(dueDate), // Display dueDate
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 131, 131, 131),
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    Text(
-                      dueTime.format(context), // Display dueTime
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 131, 131, 131),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            leading: Checkbox(
-              value: taskCompleted,
-              onChanged: onChanged,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-                side: BorderSide(
-                  color: taskCompleted ? Colors.black : Colors.white,
-                ),
+                checkColor: Colors.white,
+                activeColor: Colors.black,
               ),
-              checkColor: Colors.white,
-              activeColor: Colors.black,
             ),
           ),
         ),

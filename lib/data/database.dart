@@ -32,4 +32,9 @@ class Database {
     item.isCompleted = !item.isCompleted;
     await box.put(key, item);
   }
+
+  Future<void> updateTask(dynamic key, Task task) async {
+    var box = await _box;
+    await box.put(key, task);
+  }
 }
